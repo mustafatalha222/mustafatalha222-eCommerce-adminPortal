@@ -1,9 +1,10 @@
 "use client";
 import { useState } from "react";
-import { Tabs } from "@mantine/core";
+import { Center, Select, Tabs, Title } from "@mantine/core";
 import { TotalSale } from "./TotalSale";
 import { getSales } from "../../supabase/sales";
 import { useQuery } from "@tanstack/react-query";
+import { SALES_INTERVAL } from "../utils/constants";
 
 const tabs = {
   sales: {
@@ -18,6 +19,9 @@ const tabs = {
 
 export default function Dashboard() {
   const [activeTab, setActiveTab] = useState<string | null>(tabs.sales.value);
+  const [selectedInterval, setSelectedInterval] = useState(
+    SALES_INTERVAL.month
+  );
 
   const { data: sales } = useQuery({
     queryKey: ["sales"],
@@ -32,8 +36,19 @@ export default function Dashboard() {
         ))}
       </Tabs.List>
 
+      <Center m={"md"}>
+        <Title order={6} pr={10}>
+          Change Time Interval
+        </Title>
+        <Select
+          data={Object.values(SALES_INTERVAL)}
+          placeholder="Sales view"
+          value={selectedInterval || null}
+          onChange={(value) => setSelectedInterval(value as SALES_INTERVAL)}
+        />
+      </Center>
       <Tabs.Panel value={`${tabs.sales.value}`}>
-        <TotalSale salesData={sales || []} />
+        <TotalSale salesData={sales || []} interval={selectedInterval} />
       </Tabs.Panel>
       <Tabs.Panel value={`${tabs.inventory.value}`}>Second panel</Tabs.Panel>
     </Tabs>

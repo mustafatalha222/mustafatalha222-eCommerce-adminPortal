@@ -12,6 +12,7 @@ import {
 import { Line } from "react-chartjs-2";
 import { Center } from "@mantine/core";
 import { ISale } from "../../supabase/sales";
+import { MONTH_NAMES, SALES_INTERVAL } from "../utils/constants";
 
 ChartJS.register(
   CategoryScale,
@@ -36,79 +37,121 @@ export const options = {
   },
 };
 
-// const labels = ["Jan", "Feb", "Mar", "Apr", "May"];
-
-// export const data = {
-//   labels,
-//   datasets: [
-//     {
-//       label: "Monthly Sales",
-//       data: [100, 150, 120, 200, 180],
-//       borderColor: "rgb(255, 99, 132)",
-//       backgroundColor: "rgba(255, 99, 132, 0.5)",
-//     },
-//   ],
-// };
-
 type ITotalSale = {
   salesData: ISale[];
+  interval?: SALES_INTERVAL;
 };
 
-export function TotalSale({ salesData }: ITotalSale) {
-  const [monthlySalesData, setMonthlySalesData] = useState<ISale[]>([]);
+export function TotalSale({
+  salesData,
+  interval = SALES_INTERVAL.month,
+}: ITotalSale) {
+  const [chartLabels, setChartLabels] = useState<string[]>([]);
+  const [totalAmount, setTotalAmount] = useState<number[]>([]);
 
-  // Function to calculate total sales for each month
-  const calculateMonthlySales = () => {
+  const calculateSalesDataAndLabels = () => {
     const currentDate = new Date();
     const currentMonth = currentDate.getMonth();
     const currentYear = currentDate.getFullYear();
+    const currentDay = currentDate.getDate();
 
-    // Initialize an array to store sales data for each month
-    const monthlySales = new Array(12).fill(0);
+    let filteredSalesDataForChart: ISale[] = [];
+    let chartLabels: string[] = [];
+    let totalAmountByLabel: number[] = [];
 
-    // Filter sales data for the current year
-    const filteredSalesData = salesData.filter((sale) => {
-      const saleDate = new Date(sale.created_at);
-      return saleDate.getFullYear() === currentYear;
-    });
+    switch (interval) {
+      case SALES_INTERVAL.day:
+        filteredSalesDataForChart = salesData.filter((sale) => {
+          const saleDate = new Date(sale.created_at);
+          return (
+            saleDate.getFullYear() === currentYear &&
+            saleDate.getMonth() === currentMonth &&
+            saleDate.getDate() <= currentDay
+          );
+        });
 
-    // Calculate total sales for each month
-    filteredSalesData.forEach((sale) => {
-      const saleDate = new Date(sale.created_at);
-      const saleMonth = saleDate.getMonth();
-      const saleAmount = sale.total_price;
-      monthlySales[saleMonth] += saleAmount;
-    });
+        chartLabels = Array.from({ length: currentDay }, (_, i) => `${i + 1}`);
 
-    // Only include data up to the current month
-    const monthlyData = monthlySales.slice(0, currentMonth + 1);
-    return monthlyData;
+        totalAmountByLabel = chartLabels.map((label) => {
+          const salesForDay = filteredSalesDataForChart.filter((sale) => {
+            const saleDate = new Date(sale.created_at);
+            return saleDate.getDate() === parseInt(label, 10);
+          });
+
+          return salesForDay.reduce(
+            (total, sale) => total + sale.total_price,
+            0
+          );
+        });
+        break;
+
+      case SALES_INTERVAL.month:
+        filteredSalesDataForChart = salesData.filter((sale) => {
+          const saleDate = new Date(sale.created_at);
+          return saleDate.getFullYear() === currentYear;
+        });
+
+        chartLabels = Array.from(
+          { length: currentMonth + 1 },
+          (_, i) => MONTH_NAMES[i]
+        );
+
+        totalAmountByLabel = chartLabels.map((label) => {
+          const salesForMonth = filteredSalesDataForChart.filter((sale) => {
+            const saleDate = new Date(sale.created_at);
+            return saleDate.getMonth() === MONTH_NAMES.indexOf(label);
+          });
+
+          return salesForMonth.reduce(
+            (total, sale) => total + sale.total_price,
+            0
+          );
+        });
+        break;
+
+      case SALES_INTERVAL.year:
+        filteredSalesDataForChart = salesData.filter((sale) => {
+          const saleDate = new Date(sale.created_at);
+          const saleYear = saleDate.getFullYear();
+          return saleYear >= currentYear - 4 && saleYear <= currentYear;
+        });
+
+        chartLabels = Array.from(
+          { length: 5 },
+          (_, i) => `${currentYear - 4 + i}`
+        );
+
+        totalAmountByLabel = chartLabels.map((label) => {
+          const salesForYear = filteredSalesDataForChart.filter((sale) => {
+            const saleDate = new Date(sale.created_at);
+            return saleDate.getFullYear() === parseInt(label, 10);
+          });
+
+          return salesForYear.reduce(
+            (total, sale) => total + sale.total_price,
+            0
+          );
+        });
+        break;
+
+      default:
+        break;
+    }
+
+    setChartLabels(chartLabels);
+    setTotalAmount(totalAmountByLabel);
   };
 
   useEffect(() => {
-    const monthlyData = calculateMonthlySales();
-    setMonthlySalesData(monthlyData);
-  }, [salesData]);
+    calculateSalesDataAndLabels();
+  }, [salesData, interval]);
 
   const data = {
-    labels: [
-      "Jan",
-      "Feb",
-      "Mar",
-      "Apr",
-      "May",
-      "Jun",
-      "Jul",
-      "Aug",
-      "Sep",
-      "Oct",
-      "Nov",
-      "Dec",
-    ].slice(0, monthlySalesData.length),
+    labels: chartLabels,
     datasets: [
       {
-        label: "Revenue Per Month",
-        data: monthlySalesData,
+        label: "Revenue",
+        data: totalAmount,
         fill: true,
         borderColor: "rgba(75,192,192,1)",
         backgroundColor: "rgba(75,192,192,0.2)",
