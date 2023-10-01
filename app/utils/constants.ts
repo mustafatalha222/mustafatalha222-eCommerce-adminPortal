@@ -16,10 +16,21 @@ export const MONTH_NAMES = [
   "Dec",
 ];
 
+export const DAY_NAMES = [
+  "Sunday",
+  "Monday",
+  "Tuesday",
+  "Wednesday",
+  "Thursday",
+  "Friday",
+  "Saturday",
+];
+
 export enum SALES_INTERVAL {
   day = "day",
   month = "month",
   year = "year",
+  week = "week",
 }
 export const SUPERBASE_BUCKET = {
   BUCKET_NAME: process.env.NEXT_PUBLIC_SUPABASE_BUCKET!,

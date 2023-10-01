@@ -12,7 +12,7 @@ import {
 import { Line } from "react-chartjs-2";
 import { Center } from "@mantine/core";
 import { ISale } from "../../supabase/sales";
-import { MONTH_NAMES, SALES_INTERVAL } from "../utils/constants";
+import { DAY_NAMES, MONTH_NAMES, SALES_INTERVAL } from "../utils/constants";
 
 ChartJS.register(
   CategoryScale,
@@ -134,6 +134,26 @@ export function TotalSale({
         });
         break;
 
+      case SALES_INTERVAL.week:
+        filteredSalesDataForChart = salesData.filter((sale) => {
+          const saleDate = new Date(sale.created_at);
+          return saleDate.getFullYear() === currentYear;
+        });
+
+        chartLabels = Array.from({ length: 7 }, (_, i) => DAY_NAMES[i]);
+
+        totalAmountByLabel = chartLabels.map((label) => {
+          const salesForDay = filteredSalesDataForChart.filter((sale) => {
+            const saleDate = new Date(sale.created_at);
+            return DAY_NAMES[saleDate.getDay()] === label;
+          });
+
+          return salesForDay.reduce(
+            (total, sale) => total + sale.total_price,
+            0
+          );
+        });
+        break;
       default:
         break;
     }
