@@ -1,8 +1,10 @@
 INSERT INTO public.products (name, price, inventory, description, imageUrl, category)
 VALUES
-    ('Product 1', 19.99, 50, 'This is the first product.', '', 'Electronics'),
-    ('Product 2', 24.99, 30, 'This is the second product.', '', 'Clothing'),
-    ('Product 3', 9.99, 10, 'This is the third product.', '', 'Home & Kitchen');
+    ('Tablet', 20.00, 50, 'This is the Tablet product.', '', 'Electronics'),
+    ('Shirt',10.00, 30, 'This is the Shirt.', '', 'Clothing'),
+    ('Blender', 30.01, 1000, 'This is the Blender machine.', '', 'Home & Kitchen');
+    ('Electric bulb', 12.49, 2, 'This is the Electric bulb product.', '', 'Electronics'),
+    ('Jeans', 12.39, 5, 'This is the Jeans shirt', '', 'Clothing'),
 
 
 INSERT INTO public.customers (name, email, address, zipcode)
@@ -13,3 +15,16 @@ VALUES
   ('Emily Wilson', 'emily.wilson@example.com', '101 Pine Rd', '10101'),
   ('David Lee', 'david.lee@example.com', '555 Maple Ln', '55555'),
   ('Linda Brown', 'linda.brown@example.com', '777 Cedar Rd', '77777');
+
+INSERT INTO public.sales (quantity, total_price, customer, product)
+VALUES
+  (3,60, 1,1),
+  (2,40, 1,1),
+  (10,100, 2,2),
+  (3,30, 3,2),
+  (10,100, 2,2),
+  (10,100, 3,2),
+  (9,90, 1,2),
+  (10,100.02, 3,3),
+  (30,900.12, 4,2),
+  (112,122021.34, 4,3),

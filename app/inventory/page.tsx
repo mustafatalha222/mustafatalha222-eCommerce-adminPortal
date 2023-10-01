@@ -2,6 +2,7 @@
 import React, { useState, useEffect, useCallback } from "react";
 import {
   Avatar,
+  Badge,
   Button,
   Center,
   Flex,
@@ -155,7 +156,14 @@ const ProductTable = () => {
               </Table.Td>
               <Table.Td>{product.name}</Table.Td>
               <Table.Td>{product.description}</Table.Td>
-              <Table.Td>{product.inventory}</Table.Td>
+              <Table.Td>
+                <Badge
+                  style={{ minWidth: 40 }}
+                  color={product.inventory < 5 ? "red" : "teal"}
+                >
+                  {product.inventory}
+                </Badge>
+              </Table.Td>
               <Table.Td>₩{product.price}</Table.Td>
               <Table.Td>{product.category}</Table.Td>
               <Table.Td>

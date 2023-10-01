@@ -1,6 +1,7 @@
 import { decode } from "base64-arraybuffer";
 import { supabase } from ".";
 import { SUPERBASE_BUCKET } from "../app/utils/constants";
+import { isImageUrl } from "../app/utils/helperFunctions";
 
 export type IProduct = {
   id: string;
