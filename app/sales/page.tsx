@@ -13,8 +13,13 @@ import {
 import { BiSort } from "react-icons/bi";
 import { ISale, getSales } from "../../supabase/sales";
 import { useQuery } from "@tanstack/react-query";
-import { TIME_FRAME } from "../utils/constants";
+import { PRODUCT_CATEGORIES, TIME_FRAME } from "../utils/constants";
 import { getNestedValue } from "../utils/helperFunctions";
+
+const initialFilters = {
+  timeframe: "",
+  category: "",
+};
 
 const SaleTable = () => {
   const { data: sales, isFetching } = useQuery({
@@ -22,7 +27,7 @@ const SaleTable = () => {
     queryFn: () => getSales(),
   });
   const [data, setData] = useState<ISale[]>([]);
-  const [selectedTimeFrame, setselectedTimeFrame] = useState("");
+  const [selectedFilters, setselectedFilters] = useState(initialFilters);
 
   useEffect(() => {
     sales?.length && setData(sales);
@@ -30,8 +35,15 @@ const SaleTable = () => {
 
   const handleFilter = () => {
     if (!sales?.length) return;
+    const { category, timeframe } = selectedFilters;
     let filteredData = sales;
-    switch (selectedTimeFrame) {
+    if (category) {
+      filteredData = sales?.filter(
+        (item) => item.product.category === category
+      );
+    }
+
+    switch (timeframe) {
       case "Today":
         const today = new Date();
         filteredData = data.filter((item) => {
@@ -83,7 +95,7 @@ const SaleTable = () => {
         });
         break;
       default:
-        filteredData = data;
+        filteredData = filteredData;
     }
     setData(filteredData);
   };
@@ -116,7 +128,7 @@ const SaleTable = () => {
 
   const resetTable = () => {
     setData(sales || []);
-    setselectedTimeFrame("");
+    setselectedFilters(initialFilters);
   };
 
   return (
@@ -124,10 +136,21 @@ const SaleTable = () => {
       <Flex justify={"end"} mt={"xs"}>
         <Group gap="xs">
           <Select
+            data={PRODUCT_CATEGORIES}
+            placeholder="Filter by Category"
+            value={selectedFilters.category || null}
+            onChange={(value) =>
+              setselectedFilters({ ...selectedFilters, category: value || "" })
+            }
+          />
+
+          <Select
             data={TIME_FRAME}
             placeholder="Filter by TimeFrame"
-            value={selectedTimeFrame || null}
-            onChange={(value) => setselectedTimeFrame(value || "")}
+            value={selectedFilters.timeframe || null}
+            onChange={(value) =>
+              setselectedFilters({ ...selectedFilters, timeframe: value || "" })
+            }
           />
 
           <Button onClick={handleFilter}>Apply Filter</Button>
