@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Text, Box, NavLink } from "@mantine/core";
-import { AiFillHome, AiFillDashboard } from "react-icons/ai";
+import { AiFillHome, AiFillDashboard, AiOutlineUser } from "react-icons/ai";
 import { MdInventory, MdPointOfSale } from "react-icons/md";
 import { useRouter } from "next/navigation";
 
@@ -20,6 +20,11 @@ const tabs = [
     icon: <MdPointOfSale size={20} />,
     label: "Sales",
     link: "/sales",
+  },
+  {
+    icon: <AiOutlineUser size={20} />,
+    label: "Customers",
+    link: "/customers",
   },
 ];
 

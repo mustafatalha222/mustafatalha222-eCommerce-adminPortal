@@ -113,6 +113,7 @@ function RegisterProduct({
             label="Name"
             placeholder="Product Name"
             {...form.getInputProps("name")}
+            maxLength={25}
           />
           <Textarea
             mt={"xs"}
@@ -120,6 +121,7 @@ function RegisterProduct({
             label="Description"
             placeholder="Product Description"
             {...form.getInputProps("description")}
+            maxLength={200}
           />
           <Flex gap={"xs"} mt={"xs"}>
             <NumberInput
@@ -128,6 +130,7 @@ function RegisterProduct({
               {...form.getInputProps("inventory")}
               allowDecimal={false}
               allowNegative={false}
+              max={10000}
             />
             <NumberInput
               label="Price"
@@ -136,6 +139,7 @@ function RegisterProduct({
               decimalScale={2}
               fixedDecimalScale
               allowNegative={false}
+              max={100000}
             />
           </Flex>
           <Select

@@ -3,11 +3,14 @@ import React, { useState, useEffect, useCallback } from "react";
 import {
   Avatar,
   Button,
+  Center,
   Flex,
   Group,
   Input,
   Select,
+  Skeleton,
   Table,
+  Title,
 } from "@mantine/core";
 import { PRODUCT_CATEGORIES } from "../utils/constants";
 import { useDebouncedState, useDisclosure } from "@mantine/hooks";
@@ -17,7 +20,11 @@ import { IProduct, getProducts } from "../../supabase/products";
 import { useQuery } from "@tanstack/react-query";
 
 const ProductTable = () => {
-  const { data: products, refetch } = useQuery({
+  const {
+    data: products,
+    refetch,
+    isFetching,
+  } = useQuery({
     queryKey: ["products"],
     queryFn: () => getProducts(),
   });
@@ -163,6 +170,18 @@ const ProductTable = () => {
           ))}
         </Table.Tbody>
       </Table>
+
+      {!data.length && (
+        <>
+          {isFetching ? (
+            <Skeleton w={"100%"} height={50} mt={"sm"} />
+          ) : (
+            <Center mt={"sm"}>
+              <Title order={4}>No Product Found</Title>
+            </Center>
+          )}
+        </>
+      )}
     </>
   );
 };
