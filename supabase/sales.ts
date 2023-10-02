@@ -18,6 +18,7 @@ export type ISale = {
   product: IProductSale;
   created_at: string;
 };
+
 const TABLE_NAME = "sales";
 export type ISaleCreate = Omit<ISale, "id">;
 

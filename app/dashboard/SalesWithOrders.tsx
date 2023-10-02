@@ -1,41 +1,8 @@
 import React, { useEffect, useState, memo } from "react";
-import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Title,
-  Tooltip,
-  Legend,
-} from "chart.js";
 import { Line } from "react-chartjs-2";
 import { Center } from "@mantine/core";
 import { ISale } from "../../supabase/sales";
 import { DAY_NAMES, MONTH_NAMES, SALES_INTERVAL } from "../utils/constants";
-
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Title,
-  Tooltip,
-  Legend
-);
-
-export const options = {
-  responsive: true,
-  plugins: {
-    legend: {
-      position: "top" as const,
-    },
-    title: {
-      display: true,
-      text: "Sales and Orders Over Time",
-    },
-  },
-};
 
 type ISalesWithOrders = {
   salesData: ISale[];
@@ -236,7 +203,7 @@ function SalesWithOrders({
 
   return (
     <Center mx={"10%"}>
-      <Line options={options} data={data} />
+      <Line data={data} />
     </Center>
   );
 }
