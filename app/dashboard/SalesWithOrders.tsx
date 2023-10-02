@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, memo } from "react";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -32,22 +32,23 @@ export const options = {
     },
     title: {
       display: true,
-      text: "Revenue Generated Over Time",
+      text: "Sales and Orders Over Time",
     },
   },
 };
 
-type ITotalSale = {
+type ISalesWithOrders = {
   salesData: ISale[];
   interval?: SALES_INTERVAL;
 };
 
-export function TotalSale({
+function SalesWithOrders({
   salesData,
   interval = SALES_INTERVAL.month,
-}: ITotalSale) {
+}: ISalesWithOrders) {
   const [chartLabels, setChartLabels] = useState<string[]>([]);
   const [totalAmount, setTotalAmount] = useState<number[]>([]);
+  const [orderCount, setOrderCount] = useState<number[]>([]);
 
   const calculateSalesDataAndLabels = () => {
     const currentDate = new Date();
@@ -58,6 +59,7 @@ export function TotalSale({
     let filteredSalesDataForChart: ISale[] = [];
     let chartLabels: string[] = [];
     let totalAmountByLabel: number[] = [];
+    let orderCountByLabel: number[] = [];
 
     switch (interval) {
       case SALES_INTERVAL.day:
@@ -83,6 +85,18 @@ export function TotalSale({
             0
           );
         });
+
+        orderCountByLabel = chartLabels.map((label) => {
+          const ordersForDay = filteredSalesDataForChart.filter((sale) => {
+            const saleDate = new Date(sale.created_at);
+            return (
+              saleDate.getDate() === parseInt(label, 10) &&
+              saleDate.getMonth() === currentMonth
+            );
+          });
+
+          return ordersForDay.length;
+        });
         break;
 
       case SALES_INTERVAL.month:
@@ -106,6 +120,15 @@ export function TotalSale({
             (total, sale) => total + sale.total_price,
             0
           );
+        });
+
+        orderCountByLabel = chartLabels.map((label) => {
+          const ordersForMonth = filteredSalesDataForChart.filter((sale) => {
+            const saleDate = new Date(sale.created_at);
+            return saleDate.getMonth() === MONTH_NAMES.indexOf(label);
+          });
+
+          return ordersForMonth.length;
         });
         break;
 
@@ -132,6 +155,18 @@ export function TotalSale({
             0
           );
         });
+
+        orderCountByLabel = chartLabels.map((label, index) => {
+          const ordersForMonth = filteredSalesDataForChart.filter((sale) => {
+            const saleDate = new Date(sale.created_at);
+            return (
+              saleDate.getMonth() === index &&
+              saleDate.getFullYear() === currentYear
+            );
+          });
+
+          return ordersForMonth.length;
+        });
         break;
 
       case SALES_INTERVAL.week:
@@ -153,6 +188,18 @@ export function TotalSale({
             0
           );
         });
+
+        orderCountByLabel = chartLabels.map((label, index) => {
+          const ordersForDay = filteredSalesDataForChart.filter((sale) => {
+            const saleDate = new Date(sale.created_at);
+            return (
+              DAY_NAMES[saleDate.getDay()] === label &&
+              saleDate.getFullYear() === currentYear
+            );
+          });
+
+          return ordersForDay.length;
+        });
         break;
       default:
         break;
@@ -160,6 +207,7 @@ export function TotalSale({
 
     setChartLabels(chartLabels);
     setTotalAmount(totalAmountByLabel);
+    setOrderCount(orderCountByLabel);
   };
 
   useEffect(() => {
@@ -170,11 +218,18 @@ export function TotalSale({
     labels: chartLabels,
     datasets: [
       {
-        label: "Revenue",
+        label: "Sales",
         data: totalAmount,
         fill: true,
         borderColor: "rgba(75,192,192,1)",
         backgroundColor: "rgba(75,192,192,0.2)",
+      },
+      {
+        label: "Order Count",
+        data: orderCount,
+        fill: true,
+        borderColor: "rgba(255,99,132,1)",
+        backgroundColor: "rgba(255,99,132,0.2)",
       },
     ],
   };
@@ -185,3 +240,5 @@ export function TotalSale({
     </Center>
   );
 }
+
+export default memo(SalesWithOrders);

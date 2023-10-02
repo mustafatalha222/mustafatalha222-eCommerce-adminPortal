@@ -1,4 +1,5 @@
 export const PRODUCT_CATEGORIES = ["Electronics", "Clothing", "Home & Kitchen"];
+export const ALL_CATEGORIES = "All Categories";
 export const TIME_FRAME = ["Today", "This Week", "This Month", "This Year"];
 
 export const MONTH_NAMES = [

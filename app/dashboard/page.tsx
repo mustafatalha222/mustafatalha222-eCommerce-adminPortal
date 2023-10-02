@@ -1,10 +1,14 @@
 "use client";
-import { useState } from "react";
-import { Center, Select, Tabs, Title } from "@mantine/core";
-import { TotalSale } from "./TotalSale";
-import { getSales } from "../../supabase/sales";
+import { useState, useEffect } from "react";
+import { Center, Select, Tabs } from "@mantine/core";
+import SalesWithOrders from "./SalesWithOrders";
+import { ISale, getSales } from "../../supabase/sales";
 import { useQuery } from "@tanstack/react-query";
-import { SALES_INTERVAL } from "../utils/constants";
+import {
+  ALL_CATEGORIES,
+  PRODUCT_CATEGORIES,
+  SALES_INTERVAL,
+} from "../utils/constants";
 
 const tabs = {
   sales: {
@@ -18,15 +22,30 @@ const tabs = {
 };
 
 export default function Dashboard() {
+  const [data, setData] = useState<ISale[]>([]);
   const [activeTab, setActiveTab] = useState<string | null>(tabs.sales.value);
   const [selectedInterval, setSelectedInterval] = useState(
     SALES_INTERVAL.month
   );
-
+  const [selectedCategory, setSelectedCategory] = useState(ALL_CATEGORIES);
   const { data: sales } = useQuery({
     queryKey: ["sales"],
     queryFn: () => getSales(),
   });
+
+  useEffect(() => {
+    sales?.length && setData(sales);
+  }, [sales]);
+
+  const handleFilter = (value: string) => {
+    if (!sales?.length) return;
+    let filteredData = sales;
+    setSelectedCategory(value);
+    if (value && value !== ALL_CATEGORIES) {
+      filteredData = sales?.filter((item) => item.product.category === value);
+    }
+    setData(filteredData);
+  };
 
   return (
     <Tabs value={activeTab} onChange={setActiveTab}>
@@ -37,18 +56,23 @@ export default function Dashboard() {
       </Tabs.List>
 
       <Center m={"md"}>
-        <Title order={6} pr={10}>
-          Change Time Interval
-        </Title>
         <Select
           data={Object.values(SALES_INTERVAL)}
-          placeholder="Sales view"
+          placeholder="Change Time Frame"
           value={selectedInterval || null}
           onChange={(value) => setSelectedInterval(value as SALES_INTERVAL)}
         />
+
+        <Select
+          ml={"xs"}
+          data={[ALL_CATEGORIES, ...PRODUCT_CATEGORIES]}
+          placeholder="Product Categories"
+          value={selectedCategory || null}
+          onChange={(value) => handleFilter(value || "")}
+        />
       </Center>
       <Tabs.Panel value={`${tabs.sales.value}`}>
-        <TotalSale salesData={sales || []} interval={selectedInterval} />
+        <SalesWithOrders salesData={data || []} interval={selectedInterval} />
       </Tabs.Panel>
       <Tabs.Panel value={`${tabs.inventory.value}`}>Second panel</Tabs.Panel>
     </Tabs>
