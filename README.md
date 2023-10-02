@@ -41,4 +41,4 @@ You should run `npm run build` again any time you make changes to the site.
 
 ## APP IS DEPLOYED ON VERCEL
 
-- [Atomic:](https://mustafatalha222-e-commerce-admin-portal-iyeirokzm.vercel.app/)
+- [View live Deme: E-Commerce Link](https://mustafatalha222-e-commerce-admin-portal-iyeirokzm.vercel.app/)
