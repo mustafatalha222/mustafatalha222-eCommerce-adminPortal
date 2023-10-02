@@ -162,8 +162,8 @@ const SaleTable = () => {
         <Table.Thead>
           <Table.Tr>
             {TableRowSort("Product", "product.name")}
-            {TableRowSort("price", "product.price")}
-            {TableRowSort("price", "product.category")}
+            {TableRowSort("Price", "product.price")}
+            {TableRowSort("Category", "product.category")}
             {TableRowSort("Customer", "customer.name")}
             {TableRowSort("Quantity", "quantity")}
             {TableRowSort("Total Price", "total_price")}

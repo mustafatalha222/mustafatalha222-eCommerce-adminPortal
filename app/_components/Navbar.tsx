@@ -3,6 +3,7 @@ import { Text, Box, NavLink } from "@mantine/core";
 import { AiFillHome, AiFillDashboard, AiOutlineUser } from "react-icons/ai";
 import { MdInventory, MdPointOfSale } from "react-icons/md";
 import { useRouter } from "next/navigation";
+import { FaStore } from "react-icons/fa";
 
 const tabs = [
   { icon: <AiFillHome size={20} />, label: "Home", link: "/" },
@@ -25,6 +26,11 @@ const tabs = [
     icon: <AiOutlineUser size={20} />,
     label: "Customers",
     link: "/customers",
+  },
+  {
+    icon: <FaStore size={20} />,
+    label: "Stores",
+    link: "/stores",
   },
 ];
 
