@@ -10,7 +10,7 @@ import { AiFillDashboard, AiOutlineUser } from "react-icons/ai";
 import { FaStore } from "react-icons/fa";
 import { MdInventory, MdPointOfSale } from "react-icons/md";
 
-export const MOCKDATA = [
+const MOCKDATA = [
   {
     icon: AiFillDashboard,
     title: "Dashboard",
