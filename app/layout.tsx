@@ -9,11 +9,6 @@ import { ReactNode } from "react";
 import { Navbar } from "./_components/Navbar";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
-export const metadata = {
-  title: "E-Commerce Admin Portal",
-  description: "this is an eCommerce Admin Portal developed using nextJs",
-};
-
 export default function RootLayout({ children }: { children: ReactNode }) {
   const queryClient = new QueryClient({
     defaultOptions: {
