@@ -1,4 +1,4 @@
-# eCommerce Admin Portal
+# E-Commerce Admin Portal | Dashboard
 
 ## Description
 
@@ -13,13 +13,13 @@ Follow these steps to set up and run the project locally.
 - Node.js: Make sure you have Node.js installed. You can download it from [nodejs.org](https://nodejs.org/).
 - You will need to install yarn/npm as well
 
-### Installation
+## Running locally in development mode
 
-1. Clone the repository:
+To get started, just clone the repository and run `npm install && npm run dev`:
 
-   ```bash
-   git clone <repository-url>
-   ```
+    git clone https://github.com/mustafatalha222/mustafatalha222-eCommerce-adminPortal.git
+    yarn install
+    yarn run dev
 
 ## Configuring
 
@@ -28,14 +28,6 @@ Follow these steps to set up and run the project locally.
 3. Create .env.local file in root directly same as .env.sample and enter you superbase keys.
 4. In superbase folder you can see migration.sql file, just copy-paste this in superbase SQL editor.
 5. Under this file you can see seed.sql file, same copy-paste in SQL editor.
-
-## Running locally in development mode
-
-To get started, just clone the repository and run `npm install && npm run dev`:
-
-    git clone https://github.com/iaincollins/nextjs-starter.git
-    yarn install
-    yarn run dev
 
 ## Building and deploying in production
 

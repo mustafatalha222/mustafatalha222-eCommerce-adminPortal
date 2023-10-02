@@ -123,7 +123,7 @@ function SalesWithOrders({
           );
         });
 
-        orderCountByLabel = chartLabels.map((label, index) => {
+        orderCountByLabel = chartLabels.map((_, index) => {
           const ordersForMonth = filteredSalesDataForChart.filter((sale) => {
             const saleDate = new Date(sale.created_at);
             return (
@@ -156,7 +156,7 @@ function SalesWithOrders({
           );
         });
 
-        orderCountByLabel = chartLabels.map((label, index) => {
+        orderCountByLabel = chartLabels.map((label) => {
           const ordersForDay = filteredSalesDataForChart.filter((sale) => {
             const saleDate = new Date(sale.created_at);
             return (

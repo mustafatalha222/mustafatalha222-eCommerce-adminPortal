@@ -96,7 +96,9 @@ export default function Dashboard() {
         styles={{ list: { fontWeight: 600, fontSize: 24 } }}
       >
         {Object.values(tabs)?.map((key) => (
-          <Tabs.Tab value={key.value}>{key.label}</Tabs.Tab>
+          <Tabs.Tab key={key.value} value={key.value}>
+            {key.label}
+          </Tabs.Tab>
         ))}
       </Tabs.List>
 
