@@ -9,11 +9,6 @@ import { ReactNode } from "react";
 import { Navbar } from "./_components/Navbar";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
-const metadata = {
-  title: "E-Commerce Admin Portal",
-  description: "this is an eCommerce Admin Portal developed using nextJs",
-};
-
 export default function RootLayout({ children }: { children: ReactNode }) {
   const queryClient = new QueryClient({
     defaultOptions: {
@@ -22,7 +17,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
       },
     },
   });
-
+  const [opened, { toggle }] = useDisclosure();
   return (
     <html lang="en">
       <head>
@@ -41,7 +36,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
               navbar={{
                 width: 300,
                 breakpoint: "sm",
-                collapsed: { mobile: true },
+                collapsed: { mobile: !opened },
               }}
               padding="md"
             >
@@ -54,6 +49,12 @@ export default function RootLayout({ children }: { children: ReactNode }) {
                 }}
               >
                 <Group h="100%" px="md">
+                  <Burger
+                    opened={opened}
+                    onClick={toggle}
+                    hiddenFrom="sm"
+                    size="sm"
+                  />
                   <FaStore size={40} color={theme.colors?.primary?.[8]} />
                   <Text
                     size={"xl"}
