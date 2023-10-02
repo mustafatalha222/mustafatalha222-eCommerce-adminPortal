@@ -23,11 +23,11 @@ To get started, just clone the repository and run `npm install && npm run dev`:
 
 ## Configuring
 
-1. After clone open up folder you will see .env.sample file
-2. Needs to create a free account on superbase and then create a bucket as well for storing images.
-3. Create .env.local file in root directly same as .env.sample and enter you superbase keys.
-4. In superbase folder you can see migration.sql file, just copy-paste this in superbase SQL editor.
-5. Under this file you can see seed.sql file, same copy-paste in SQL editor.
+1. After cloning the project, open the folder, and you'll find a file named .env.sample.
+2. Create a free Superbase account and make a new project. Create a bucket within this project to store images.
+3. In the project's root directory, create a new file named .env.local, similar to .env.sample, and enter your Superbase API keys.
+4. Inside the "superbase" folder, you'll see a file named migration.sql. Simply copy and paste its contents into the Superbase SQL editor.
+5. In the same folder, you'll find a file named seed.sql. Copy and paste its contents into the SQL editor as well.
 
 ## Building and deploying in production
 
@@ -38,3 +38,7 @@ If you wanted to run this site in production, you should install modules then bu
     npm start
 
 You should run `npm run build` again any time you make changes to the site.
+
+## APP IS DEPLOYED ON VERCEL
+
+- [Atomic:](https://mustafatalha222-e-commerce-admin-portal-iyeirokzm.vercel.app/)
